@@ -4,6 +4,8 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use Phpinheiros\Pc3Downloader\Command as Commands;
 
 $application = new Application();
+$application->add(new Commands\DownloadCommand());
 $application->run();
