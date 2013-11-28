@@ -1,3 +1,6 @@
 vendor/
 .DS_Store
 logs/*
+.buildpath
+.project
+.settings/
