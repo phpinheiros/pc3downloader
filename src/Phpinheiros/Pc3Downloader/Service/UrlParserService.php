@@ -58,6 +58,6 @@ class UrlParserService
 
         $dadosPagina = explode('/', $pagina);
 
-        return self::URL_PALCOMP3 . trim($dadosPagina[0], '/') . '/';
+        return self::URL_PALCOMP3 . trim($dadosPagina[0], '/') . '/musicas.htm';
     }
 }

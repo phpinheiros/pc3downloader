@@ -7,7 +7,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Phpinheiros\Pc3Downloader\Service as Services;
-
+use Symfony\Component\CssSelector\CssSelector;
+use Phpinheiros\Pc3Downloader\Service\DownloaderService;
+use Phpinheiros\Pc3Downloader\Service\ListagemMusicasService;
+use Phpinheiros\Pc3Downloader\Service\UrlParserService;
 class DownloadCommand extends Command
 {
     protected function configure()
@@ -23,19 +26,34 @@ class DownloadCommand extends Command
             ->addArgument(
                     'destino',
                     InputArgument::OPTIONAL,
-                    'Qual o destino dos arquivos?'
-                )
-            ->addOption(
-                    'playlist',
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Se informada serão baixadas as músicas da playlist.'
+                    'Qual o destino dos arquivos?',
+                    $_SERVER['PWD']
                 );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $urlParser = new Services\UrlParserService();
-        $output->writeln('Buscando');
+        $output->writeln('Buscando as musicas!');
+        $downloader = new DownloaderService();
+        $urlParser = new UrlParserService();
+        $listagemMusicas = new ListagemMusicasService($downloader);
+        try{
+            $urlPagina = $urlParser->getUrl($input->getArgument('pagina'));
+
+            $musicas = $listagemMusicas->fetchUrlsMusicas($urlPagina, 'download');
+
+            if( empty($musicas) ) {
+                $output->writeln('Nenhuma musica foi encontrada.');
+                return;
+            }
+
+            $output->writeln( sprintf('%d musicas foram encontradas.', count($musicas)) );
+
+            $downloader->fetchFiles($musicas, $input->getArgument('destino'), $output);
+        } catch (\Exception $e) {
+            $output->writeln(
+                sprintf('<error>%s</error>', $e->getMessage())
+            );
+        }
     }
 }

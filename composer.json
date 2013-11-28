@@ -1,19 +1,18 @@
 {
-    "name": "phpinheiros/pc3downloader",
-    "description": "Biblioteca para baixar músicas para uma determinada página",
-    "authors": [
-        {
-            "name": "Vinicius de Sa",
-            "email": "viniciusss@me.com"
-        }
-    ],
-    "bin": [
-        "bin/pc3downloader"
-    ],
-    "autoload": {
-        "psr-0": {"Phpinheiros\\": "src/"}
-    },
-    "require": {
-        "symfony/console": "2.3.6"
+  "name" : "phpinheiros/pc3downloader",
+  "description" : "Biblioteca para baixar músicas para uma determinada página",
+  "require" : {
+    "symfony/console" : "2.3.6",
+    "symfony/css-selector" : "=v2.3.7"
+  },
+  "authors" : [ {
+    "name" : "Vinicius de Sa",
+    "email" : "viniciusss@me.com"
+  } ],
+  "autoload" : {
+    "psr-0" : {
+      "Phpinheiros\\" : "src/"
     }
+  },
+  "bin" : [ "bin/pc3downloader" ]
 }
