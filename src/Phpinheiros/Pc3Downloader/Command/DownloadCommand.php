@@ -4,10 +4,7 @@ namespace Phpinheiros\Pc3Downloader\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Phpinheiros\Pc3Downloader\Service as Services;
-use Symfony\Component\CssSelector\CssSelector;
 use Phpinheiros\Pc3Downloader\Service\DownloaderService;
 use Phpinheiros\Pc3Downloader\Service\ListagemMusicasService;
 use Phpinheiros\Pc3Downloader\Service\UrlParserService;
@@ -16,7 +13,7 @@ class DownloadCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('pc3downloader:download')
+            ->setName('download')
             ->setDescription('Baixa todas as musicas de uma determinada pagina do PalcoMP3.')
             ->addArgument(
                     'pagina',

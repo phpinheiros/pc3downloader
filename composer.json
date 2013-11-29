@@ -3,7 +3,8 @@
   "description" : "Biblioteca para baixar músicas para uma determinada página",
   "require" : {
     "symfony/console" : "2.3.6",
-    "symfony/css-selector" : "=v2.3.7"
+    "symfony/css-selector" : "=v2.3.7",
+    "kherge/box": "~2.0"
   },
   "authors" : [ {
     "name" : "Vinicius de Sa",
