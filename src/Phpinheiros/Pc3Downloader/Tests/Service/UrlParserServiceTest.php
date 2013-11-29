@@ -16,17 +16,17 @@ class UrlParserServiceTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'cristianoaraujo', 
-                UrlParserService::URL_PALCOMP3 . 'cristianoaraujo/'
+                'cristianoaraujo',
+                UrlParserService::URL_PALCOMP3 . 'cristianoaraujo/musicas.htm'
             ),
             array(
-                'viniciusss', 
-                UrlParserService::URL_PALCOMP3 . 'viniciusss/'
+                'viniciusss',
+                UrlParserService::URL_PALCOMP3 . 'viniciusss/musicas.htm'
             )
             ,
             array(
-                'viniciusss123', 
-                UrlParserService::URL_PALCOMP3 . 'viniciusss123/'
+                'viniciusss123',
+                UrlParserService::URL_PALCOMP3 . 'viniciusss123/musicas.htm'
             )
         );
     }
@@ -61,7 +61,7 @@ class UrlParserServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * 
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testExceptionComPaginaEmBranco()

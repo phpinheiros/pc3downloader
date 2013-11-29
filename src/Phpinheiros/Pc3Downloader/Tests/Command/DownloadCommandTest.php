@@ -14,7 +14,7 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->application = new Application();
         $this->application->add(new DownloadCommand());
-        $this->command = $this->application->find('pc3downloader:download');
+        $this->command = $this->application->find('download');
         $this->commandTester = new CommandTester($this->command);
     }
 
@@ -33,11 +33,12 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->commandTester->execute(
             array(
-                'command' => $this->command->getName(), 
-                'pagina' => 'abc',
+                'command' => $this->command->getName(),
+                'pagina' => 'kajnsdkjanskjdnaksjdnkasjndkasjn',
+                'destino' => sys_get_temp_dir(),
             )
         );
 
-        $this->assertRegExp('/Buscando/', $this->commandTester->getDisplay());
+        $this->assertRegExp('/Buscando as musicas!/', $this->commandTester->getDisplay());
     }
 }
