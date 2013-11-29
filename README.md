@@ -14,7 +14,7 @@ Lista de dependências:
 ======
 Para executar:
 ======
-`php pc3downloader.phar NOME_USUARIO`
+`php pc3downloader.phar download NOME_USUARIO`
 
 ======
 Download
