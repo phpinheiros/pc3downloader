@@ -48,7 +48,7 @@ class ListagemMusicasService
         $musicas = array();
 
         foreach($elements as $node) {
-            $musicas[] = $node->getAttribute('href');
+            $musicas[] = trim($node->getAttribute('href'), '?');
         }
 
         return $musicas;
