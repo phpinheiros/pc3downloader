@@ -36,7 +36,7 @@ class DownloadCommand extends Command
         $listagemMusicas = new ListagemMusicasService($downloader);
         try{
             $urlPagina = $urlParser->getUrl($input->getArgument('pagina'));
-
+            
             $musicas = $listagemMusicas->fetchUrlsMusicas($urlPagina, 'download');
 
             if( empty($musicas) ) {

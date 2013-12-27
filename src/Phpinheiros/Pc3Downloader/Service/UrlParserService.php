@@ -7,7 +7,7 @@ namespace Phpinheiros\Pc3Downloader\Service;
  */
 class UrlParserService
 {
-    const URL_PALCOMP3 = 'http://www.palcomp3.com/';
+    const URL_PALCOMP3 = 'http://palcomp3.com/';
 
     /**
      * Retorna a url a ser utilizada

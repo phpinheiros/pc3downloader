@@ -20,12 +20,29 @@ class DownloaderService
             throw new RunTimeException('O destino informado nao possui permissao de escrita.');
         }
 
-        $conteudo = @file_get_contents($url);
+        $oCurl = curl_init();
+        curl_setopt($oCurl, CURLOPT_URL, $url);
+        curl_setopt($oCurl, CURLOPT_HEADER, 1);
+        curl_setopt($oCurl, CURLOPT_VERBOSE, 0);
+        curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($oCurl, CURLOPT_CUSTOMREQUEST,'GET');
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($oCurl, CURLOPT_MAXREDIRS, 2);
+        curl_setopt($oCurl, CURLOPT_USERAGENT,
+    "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7");
+        $httpProxy = getenv('http_proxy');
+
+        if ( false !== $httpProxy ) {
+            curl_setopt($oCurl, CURLOPT_PROXY, $httpProxy);
+        }
+
+        $conteudo = curl_exec($oCurl);
 
         if( false === $conteudo ) {
             throw new RunTimeException('A url informada eh invalida.');
         }
-
+        
         $destino->fwrite($conteudo);
     }
 
@@ -34,6 +51,9 @@ class DownloaderService
         foreach($urls as $url) {
             $nomeArquivo = basename(parse_url($url, PHP_URL_PATH));
             $output->writeln('Baixando a musica: ' . $nomeArquivo);
+            if( ! file_exists($diretorio) ) {
+                mkdir($diretorio, 0, true);
+            }
 
             $filename = realpath($diretorio) . DIRECTORY_SEPARATOR .$nomeArquivo;
 
@@ -48,6 +68,7 @@ class DownloaderService
      */
     public function fetchPageContent($url)
     {
+        var_dump($url);
         $conteudo = new \SplTempFileObject();
 
         $this->fetchFile($url, $conteudo);
