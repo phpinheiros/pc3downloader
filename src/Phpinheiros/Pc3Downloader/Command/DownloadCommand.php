@@ -25,7 +25,8 @@ class DownloadCommand extends Command
                     InputArgument::OPTIONAL,
                     'Qual o destino dos arquivos?',
                     $_SERVER['PWD']
-                );
+                )
+        ->addOption('playlist');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,7 +38,11 @@ class DownloadCommand extends Command
         try{
             $urlPagina = $urlParser->getUrl($input->getArgument('pagina'));
             
-            $musicas = $listagemMusicas->fetchUrlsMusicas($urlPagina, 'download');
+            if( $input->hasOption('playlist') ) {
+                $musicas = $listagemMusicas->fetchUrlsPlaylist($urlPagina);
+            } else {
+                $musicas = $listagemMusicas->fetchUrlsMusicas($urlPagina, 'download');
+            }
 
             if( empty($musicas) ) {
                 $output->writeln('Nenhuma musica foi encontrada.');

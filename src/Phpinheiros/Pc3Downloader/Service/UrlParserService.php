@@ -31,14 +31,10 @@ class UrlParserService
 
         $parserUri = parse_url($url);
 
-        if( 'www.' != substr($parserUri['host'], 0, 4) ) {
-            $parserUri['host'] = 'www.' . $parserUri['host'];
-        }
-
         if($this->fetchParserUri()['host'] != $parserUri['host']) {
             throw new \InvalidArgumentException('A url informada deve ser do site palcomp3.com');
         }
-
+        
         if($this->fetchParserUri()['scheme'] != $parserUri['scheme']) {
             throw new \InvalidArgumentException('A url informada deve ser do site palcomp3.com');
         }

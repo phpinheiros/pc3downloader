@@ -32,18 +32,7 @@ class ListagemMusicasService
      */
     public function fetchUrlsMusicas($urlPagina, $classElements)
     {
-        if( empty($urlPagina) ) {
-            throw new \InvalidArgumentException('O caminho da pagina deve ser informado.');
-        }
-
-        if( empty($classElements) ) {
-            throw new \InvalidArgumentException('A classe dos elementos HTML deve ser informada.');
-        }
-
-        $document = $this->getDownloaderService()->fetchPageContent($urlPagina);
-        $xpath = new \DOMXPath($document);
-
-        $elements = $xpath->query(CssSelector::toXPath('a.' . $classElements));
+        $elements = $this->fetchElementsUrl($urlPagina, $classElements);
 
         $musicas = array();
 
@@ -52,6 +41,37 @@ class ListagemMusicasService
         }
 
         return $musicas;
+    }
+    
+    public function fetchUrlsPlaylist($urlPagina)
+    {
+        $listaMusica = $this->fetchElementsUrl($urlPagina, 'li[data-servidor!=""]');
+        $musicas = [];
+        foreach($listaMusica as $node) {
+            $nomeArquivo = $node->getAttribute('data-arquivo');
+            $servidor = $node->getAttribute('data-servidor');
+            $hash = md5($nomeArquivo);
+            $musicas[] = trim(sprintf('%s/%s/%s/%s/%s/%s', $servidor, $hash[0], $hash[1], $hash[2], $hash[3], $nomeArquivo));
+        }
+        
+        return $musicas;
+    }
+    
+    protected function fetchElementsUrl($url, $classElements)
+    {
+        if( empty($url) ) {
+            throw new \InvalidArgumentException('O caminho da pagina deve ser informado.');
+        }
+        
+        if( empty($classElements) ) {
+            throw new \InvalidArgumentException('A classe dos elementos HTML deve ser informada.');
+        }
+        
+        $document = $this->getDownloaderService()->fetchPageContent($url);
+        
+        $xpath = new \DOMXPath($document);
+        
+        return $xpath->query(CssSelector::toXPath($classElements));
     }
 }
 
