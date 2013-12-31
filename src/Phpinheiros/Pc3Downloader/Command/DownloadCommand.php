@@ -46,7 +46,6 @@ class DownloadCommand extends Command
 
             if( empty($musicas) ) {
                 $output->writeln('Nenhuma musica foi encontrada.');
-                return;
             }
 
             $output->writeln( sprintf('%d musicas foram encontradas.', count($musicas)) );

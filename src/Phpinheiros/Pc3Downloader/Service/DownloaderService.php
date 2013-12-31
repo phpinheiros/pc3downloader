@@ -10,6 +10,11 @@ use \RunTimeException;
 class DownloaderService
 {
     /**
+     * Curl resource
+     * @var resource
+     */
+    private $ch;
+    /**
      * Metodo para baixar um arquivo de um determinado local
      * @param string $url Caminho do arquivo
      * @param \SplFileObject $destino Caminho do arquivo
@@ -19,28 +24,40 @@ class DownloaderService
         if( false == $destino->isWritable() && ! $destino instanceof \SplTempFileObject ) {
             throw new RunTimeException('O destino informado nao possui permissao de escrita.');
         }
-
-        $oCurl = curl_init();
-        curl_setopt($oCurl, CURLOPT_URL, $url);
-        curl_setopt($oCurl, CURLOPT_HEADER, 1);
-        curl_setopt($oCurl, CURLOPT_VERBOSE, 0);
-        curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($oCurl, CURLOPT_CUSTOMREQUEST,'GET');
-        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($oCurl, CURLOPT_MAXREDIRS, 2);
-        curl_setopt($oCurl, CURLOPT_USERAGENT,
-    "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7");
-        $httpProxy = getenv('http_proxy');
-
-        if ( false !== $httpProxy ) {
-            curl_setopt($oCurl, CURLOPT_PROXY, $httpProxy);
+        
+        if( is_null($this->ch) ) {
+            $this->ch = curl_init();
+            curl_setopt($this->ch, CURLOPT_URL, $url);
+            curl_setopt($this->ch, CURLOPT_HEADER, 1);
+            curl_setopt($this->ch, CURLOPT_VERBOSE, 0);
+            curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST,'GET');
+            curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($this->ch, CURLOPT_MAXREDIRS, 10);
+            curl_setopt($this->ch, CURLOPT_TIMEOUT, 320);
+            curl_setopt($this->ch, CURLOPT_VERBOSE, 1);
+            
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
+                'Connection: Keep-Alive',
+                'Keep-Alive: 300'
+            ));
+            
+            curl_setopt($this->ch, CURLOPT_USERAGENT,
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0");
+            $httpProxy = getenv('http_proxy');
+            
+            if ( false !== $httpProxy ) {
+                curl_setopt($this->ch, CURLOPT_PROXY, $httpProxy);
+            }
         }
+        
+        
 
-        $conteudo = curl_exec($oCurl);
+        $conteudo = curl_exec($this->ch);
 
         if( false === $conteudo ) {
-            throw new RunTimeException('A url informada eh invalida.');
+            throw new RunTimeException(sprintf('A url informada eh invalida. Erro:', curl_error($this->ch)));
         }
         
         $destino->fwrite($conteudo);
@@ -56,7 +73,12 @@ class DownloaderService
             }
 
             $filename = realpath($diretorio) . DIRECTORY_SEPARATOR .$nomeArquivo;
-
+            
+            if( file_exists($filename) && 1024 < filesize($filename) ) {
+                $output->writeln("\t\t\tA musica ja foi baixada.");
+                continue;
+            }
+            
             $this->fetchFile($url, new \SplFileObject($filename, 'a'));
         }
     }
@@ -83,5 +105,12 @@ class DownloaderService
         $domDocument->loadHTML($fileContent);
         libxml_use_internal_errors(false);
         return $domDocument;
+    }
+    
+    public function __destruct()
+    {
+        if( is_resource($this->ch) ) {
+            curl_close($this->ch);
+        }
     }
 }
