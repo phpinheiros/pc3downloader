@@ -49,7 +49,7 @@ class ListagemMusicasService
         $musicas = [];
         foreach($listaMusica as $node) {
             $nomeArquivo = $node->getAttribute('data-arquivo');
-            $servidor = $node->getAttribute('data-servidor');
+            $servidor = trim($node->getAttribute('data-servidor'), '/');
             $hash = md5($nomeArquivo);
             $musicas[] = trim(sprintf('%s/%s/%s/%s/%s/%s', $servidor, $hash[0], $hash[1], $hash[2], $hash[3], $nomeArquivo));
         }
