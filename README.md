@@ -21,3 +21,4 @@ Download
 ======
 
 * [v0.1](https://github.com/phpinheiros/pc3downloader/releases/download/v0.1/pc3downloader.phar)
+* [v0.2](https://github.com/phpinheiros/pc3downloader/releases/download/v0.2/pc3downloader.phar)

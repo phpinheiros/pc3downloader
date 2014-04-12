@@ -4,7 +4,7 @@
   "require" : {
     "symfony/console" : "2.3.6",
     "symfony/css-selector" : "=v2.3.7",
-    "kherge/box": "~2.0",
+    "kherge/box": "~2.4",
     "ext-curl": "*"
   },
   "authors" : [ {
